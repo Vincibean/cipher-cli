@@ -11,13 +11,13 @@ data Algo = Caesar {op :: Op, msg :: String, numKey :: Int} | Vigenere {op :: Op
 
 caesar =
   Caesar
-    { numKey = def, -- &= help "Number of threads to use" &= name "j" &= typ "NUM"&= argPos 0
+    { numKey = def,
       op =
         enum
           [ Encrypt &= help "Encrypt message",
             Decrypt &= help "Decrypt message"
           ],
-      msg = def &= help "Message" -- &= name "m"
+      msg = def &= help "Message"
     }
     &= help "Use Caesar's algorithm"
 

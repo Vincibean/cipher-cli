@@ -7,15 +7,15 @@ import Test.Hspec
 import Test.QuickCheck
 import Types
 
-newtype Key = Key String deriving (Eq, Show)
+newtype ArbKey = ArbKey Key deriving (Eq, Show)
 
-instance Arbitrary Key where
-  arbitrary = Key <$> shuffle (['a' .. 'z'] ++ ['A' .. 'Z'])
+instance Arbitrary ArbKey where
+  arbitrary = (ArbKey . fromJust) . key <$> listOf1 (elements (['a' .. 'z'] ++ ['A' .. 'Z']))
 
 newtype ArbEncryptable = ArbEncryptable Encryptable deriving (Eq, Show)
 
 instance Arbitrary ArbEncryptable where
-  arbitrary = (ArbEncryptable . fromJust) . encryptable <$> shuffle (['a' .. 'z'] ++ ['A' .. 'Z'])
+  arbitrary = (ArbEncryptable . fromJust) . encryptable <$> listOf1 (elements (['a' .. 'z'] ++ ['A' .. 'Z']))
 
 spec :: Spec
 spec = do
@@ -37,11 +37,13 @@ spec = do
   describe "vigenere" $ do
     it "should ciper a specific string as intended" $ do
       let hello = fromJust $ encryptable "hello"
-      let res = extractDecryptable . vigenere "key" $ hello
+      let k = fromJust $ key "key"
+      let res = extractDecryptable . vigenere k $ hello
       res `shouldBe` "rijvs"
     it "should deciper a specific string as intended" $ do
       let rijvs = fromJust $ decryptable "rijvs"
-      let res = extractEncryptable . unVigenere "key" $ rijvs
+      let k = fromJust $ key "key"
+      let res = extractEncryptable . unVigenere k $ rijvs
       res `shouldBe` "hello"
     it "should cipher and decipher any word using any key" $
-      property $ \(ArbEncryptable s) (Key k) -> not (null k) ==> (extractEncryptable . unVigenere k . vigenere k) s === extractEncryptable s
+      property $ \(ArbEncryptable s) (ArbKey k) -> (extractEncryptable . unVigenere k . vigenere k) s === extractEncryptable s

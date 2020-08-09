@@ -38,8 +38,6 @@ shift' n c chars = case elemIndex c chars of
     where
       shifted = i + n
 
-type Key = String
-
 vigenere :: Key -> Encryptable -> Decryptable
 vigenere k (extractEncryptable -> s) = fromJust $ decryptable $ vigenereCodec posShift k s
 
@@ -47,7 +45,7 @@ unVigenere :: Key -> Decryptable -> Encryptable
 unVigenere k (extractDecryptable -> s) = fromJust $ encryptable $ vigenereCodec negShift k s
 
 vigenereCodec :: (Char -> Int) -> Key -> String -> String
-vigenereCodec f k m = z
+vigenereCodec f (extractKey -> k) m = z
   where
     x = zipLetters (cycle k) m
     y = map (\(k, m) -> (f k, m)) x

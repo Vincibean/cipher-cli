@@ -46,6 +46,7 @@ executable cipher-cli-exe
   build-depends:
       base >=4.7 && <5
     , cipher-cli
+    , cmdargs
   default-language: Haskell2010
 
 test-suite cipher-cli-test

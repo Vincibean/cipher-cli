@@ -1,7 +1,11 @@
+{-# LANGUAGE ViewPatterns #-}
+
 module Cipher (caesar, unCaesar, vigenere, unVigenere) where
 
 import Data.Char
 import Data.List (elemIndex)
+import Data.Maybe
+import Types
 
 minOrdUpper :: Int
 minOrdUpper = ord 'A'
@@ -13,11 +17,11 @@ lowers = ['a' .. 'z']
 
 uppers = ['A' .. 'Z']
 
-caesar :: Int -> String -> String
-caesar n = map $ shift n
+caesar :: Int -> Encryptable -> Decryptable
+caesar n (extractEncryptable -> s) = fromJust $ decryptable $ map (shift n) s
 
-unCaesar :: Int -> String -> String
-unCaesar n = map $ shift (- n)
+unCaesar :: Int -> Decryptable -> Encryptable
+unCaesar n (extractDecryptable -> s) = fromJust $ encryptable $ map (shift (- n)) s
 
 shift :: Int -> Char -> Char
 shift n c
@@ -36,15 +40,11 @@ shift' n c chars = case elemIndex c chars of
 
 type Key = String
 
-type Message = String
+vigenere :: Key -> Encryptable -> Decryptable
+vigenere k (extractEncryptable -> s) = fromJust $ decryptable $ vigenereCodec posShift k s
 
-type EncodedMessage = String
-
-vigenere :: Key -> Message -> EncodedMessage
-vigenere = vigenereCodec posShift
-
-unVigenere :: Key -> EncodedMessage -> Message
-unVigenere = vigenereCodec negShift
+unVigenere :: Key -> Decryptable -> Encryptable
+unVigenere k (extractDecryptable -> s) = fromJust $ encryptable $ vigenereCodec negShift k s
 
 vigenereCodec :: (Char -> Int) -> Key -> String -> String
 vigenereCodec f k m = z

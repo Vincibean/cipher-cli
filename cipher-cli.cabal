@@ -27,6 +27,7 @@ library
   exposed-modules:
       Cipher
       Lib
+      Types
   other-modules:
       Paths_cipher_cli
   hs-source-dirs:

@@ -15,6 +15,8 @@ spec = do
   describe "caesar" $ do
     it "should ciper a specific string as intended" $
       caesar 3 "hello" `shouldBe` "khoor"
+    it "should ciper a specific string as intended, even when the key is greater than the size of the alphabet" $
+      caesar 29 "hello" `shouldBe` "khoor"
     it "should deciper a specific string as intended" $
       unCaesar 3 "khoor" `shouldBe` "hello"
     it "should cipher and decipher any word using any key" $

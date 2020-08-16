@@ -32,6 +32,12 @@ spec = do
           let hello = fromJust $ encryptable "hello"
           let res   = extractDecryptable . caesar 29 $ hello
           res `shouldBe` "khoor"
+    it
+        "should ciper a specific string as intended, even when the key is negative"
+      $ do
+          let hello = fromJust $ encryptable "khoor"
+          let res   = extractDecryptable . caesar (-3) $ hello
+          res `shouldBe` "hello"
     it "should deciper a specific string as intended" $ do
       let khoor = fromJust $ decryptable "khoor"
       let res   = extractEncryptable . unCaesar 3 $ khoor

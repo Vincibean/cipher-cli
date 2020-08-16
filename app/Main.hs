@@ -2,12 +2,14 @@
 
 module Main where
 
-import           Lib
+import qualified Cipher                        as C
+import           Types
 import           System.Console.CmdArgs
+import           Data.Maybe
 
-data Op = Encrypt | Decrypt deriving (Show, Data, Typeable)
+data Op = Encrypt | Decrypt deriving (Show, Eq, Data, Typeable)
 
-data Algo = Caesar {op :: Op, msg :: String, numKey :: Int} | Vigenere {op :: Op, msg :: String, stringKey :: String} deriving (Show, Data, Typeable)
+data Algo = Caesar {op :: Op, msg :: String, numKey :: Int} | Vigenere {op :: Op, msg :: String, stringKey :: String} deriving (Show, Eq, Data, Typeable)
 
 caesar =
   Caesar
@@ -42,4 +44,24 @@ cipher =
     &= help "Encrypt and decrypt messages using various algorithms"
     &= summary "cipher-cli v0.0.0, (C) Vincibean"
 
-main = print =<< cmdArgs cipher
+codec :: Algo -> String
+codec (Caesar Encrypt msg numKey) =
+  maybe "Unencryptable messagge" extractDecryptable
+    $   C.caesar numKey
+    <$> encryptable msg
+codec (Caesar Decrypt msg numKey) =
+  maybe "Undecryptable messagge" extractEncryptable
+    $   C.unCaesar numKey
+    <$> decryptable msg
+codec (Vigenere Encrypt msg stringKey) =
+  maybe "Unencryptable messagge" extractDecryptable
+    $   C.vigenere
+    <$> key stringKey
+    <*> encryptable msg
+codec (Vigenere Decrypt msg stringKey) =
+  maybe "Undecryptable messagge" extractEncryptable
+    $   C.unVigenere
+    <$> key stringKey
+    <*> decryptable msg
+
+main = print =<< codec <$> cmdArgs cipher

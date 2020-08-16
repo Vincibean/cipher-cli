@@ -11,22 +11,22 @@ data Algo = Caesar {op :: Op, msg :: String, numKey :: Int} | Vigenere {op :: Op
 
 caesar =
   Caesar
-      { numKey = def
+      { numKey = def &= help "The integer to use as key"
       , op     = enum
-        [Encrypt &= help "Encrypt message", Decrypt &= help "Decrypt message"]
-      , msg    = def &= help "Message"
+        [Encrypt &= help "Encrypt a message", Decrypt &= help "Decrypt a message"]
+      , msg    = def &= help "The message to encrypt / decrypt"
       }
-    &= help "Use Caesar's algorithm"
+    &= help "Use Caesar's encryption / decryption algorithm"
 
 vigenere =
   Vigenere
-      { stringKey = def
+      { stringKey = def &= help "The string to use as key"
       , op        = enum
-                      [ Encrypt &= help "Encrypt message" &= name "e"
-                      , Decrypt &= help "Decrypt message" &= name "d"
+                      [ Encrypt &= help "Encrypt a message" &= name "e"
+                      , Decrypt &= help "Decrypt a message" &= name "d"
                       ]
-      , msg       = def &= help "Message" &= name "m"
+      , msg       = def &= help "The message to encrypt / decrypt" &= name "m"
       }
-    &= help "Use Vigenere's algorithm"
+    &= help "Use Vigenere's encryption / decryption algorithm"
 
 main = print =<< cmdArgs (modes [caesar, vigenere])

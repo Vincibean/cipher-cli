@@ -42,7 +42,7 @@ cipher =
   modes [caesar, vigenere]
     &= verbosity
     &= help "Encrypt and decrypt messages using various algorithms"
-    &= summary "cipher-cli v0.0.0, (C) Vincibean"
+    &= summary "cipher-cli v0.0.0.1, (C) Vincibean"
 
 codec :: Algo -> String
 codec (Caesar Encrypt msg numKey) =

@@ -32,4 +32,10 @@ vigenere =
       }
     &= help "Use Vigenere's encryption / decryption algorithm"
 
-main = print =<< cmdArgs (modes [caesar, vigenere])
+cipher =
+  modes [caesar, vigenere]
+    &= verbosity
+    &= help "Encrypt and decrypt messages using various algorithms"
+    &= summary "cipher-cli v0.0.0, (C) Vincibean"
+
+main = print =<< cmdArgs cipher

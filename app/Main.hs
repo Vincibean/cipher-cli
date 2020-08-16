@@ -12,8 +12,11 @@ data Algo = Caesar {op :: Op, msg :: String, numKey :: Int} | Vigenere {op :: Op
 caesar =
   Caesar
       { numKey = def &= help "The integer to use as key"
-      , op     = enum
-        [Encrypt &= help "Encrypt a message", Decrypt &= help "Decrypt a message"]
+      , op     =
+        enum
+          [ Encrypt &= help "Encrypt a message"
+          , Decrypt &= help "Decrypt a message"
+          ]
       , msg    = def &= help "The message to encrypt / decrypt"
       }
     &= help "Use Caesar's encryption / decryption algorithm"

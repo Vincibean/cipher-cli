@@ -1,7 +1,7 @@
 name:                cipher-cli
 version:             0.0.0.1
 github:              "Vincibean/cipher-cli"
-license:             GPLv3
+license:             GPL-3
 author:              "Vincibean"
 maintainer:          "sepensi@gmail.com"
 copyright:           "2020 Vincibean"
